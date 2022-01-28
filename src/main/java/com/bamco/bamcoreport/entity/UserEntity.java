@@ -15,6 +15,8 @@ import java.util.Date;
 )
 public class UserEntity implements Serializable {
 
+    private static final long serialVersionUID = 6296269820140043729L;
+
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -27,7 +29,7 @@ public class UserEntity implements Serializable {
     private Boolean enabled = true;
 
     @JsonIgnore
-    @OneToOne(targetEntity = UserContactInfo.class, mappedBy = "userEntity")
+    @OneToOne(targetEntity = UserContactInfo.class, mappedBy = "userid")
     private UserContactInfo userContactInfo;
 
     @Column(
@@ -41,19 +43,19 @@ public class UserEntity implements Serializable {
             nullable = false,
             length = 255
     )
-    private String encryptedPassword;
+    private String encryptedpassword;
 
     @Column(
             nullable = false,
             length = 255
     )
-    private String firstName;
+    private String firstname;
 
     @Column(
             nullable = false,
             length = 255
     )
-    private String lastName;
+    private String lastname;
 
     @Column(
             nullable = false,
@@ -65,28 +67,154 @@ public class UserEntity implements Serializable {
             nullable = false,
             length = 255
     )
-    private String jobTitle;
+    private String jobtitle;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "manageruserid",
             nullable = true
     )
-    private UserEntity managerUserId;
+    private UserEntity manageruserid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "created_by",
+            name = "createdby",
             nullable = false
     )
-    private UserEntity createdBy;
+    private UserEntity createdby;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "createdat", nullable = false, updatable = false)
+    private LocalDateTime createdat;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "updatedat")
+    private LocalDateTime updatedat;
 
+    public UserEntity(){
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public UserContactInfo getUserContactInfo() {
+        return userContactInfo;
+    }
+
+    public void setUserContactInfo(UserContactInfo userContactInfo) {
+        this.userContactInfo = userContactInfo;
+    }
+
+    public String getUserName() {
+        return username;
+    }
+
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    public String getEncryptedpassword() {
+        return encryptedpassword;
+    }
+
+    public void setEncryptedpassword(String encryptedpassword) {
+        this.encryptedpassword = encryptedpassword;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getJobtitle() {
+        return jobtitle;
+    }
+
+    public void setJobtitle(String jobtitle) {
+        this.jobtitle = jobtitle;
+    }
+
+    public UserEntity getManageruserid() {
+        return manageruserid;
+    }
+
+    public void setManageruserid(UserEntity manageruserid) {
+        this.manageruserid = manageruserid;
+    }
+
+    public UserEntity getCreatedby() {
+        return createdby;
+    }
+
+    public void setCreatedby(UserEntity createdby) {
+        this.createdby = createdby;
+    }
+
+    public LocalDateTime getCreatedat() {
+        return createdat;
+    }
+
+    public void setCreatedat(LocalDateTime createdat) {
+        this.createdat = createdat;
+    }
+
+    public LocalDateTime getUpdatedat() {
+        return updatedat;
+    }
+
+    public void setUpdatedat(LocalDateTime updatedat) {
+        this.updatedat = updatedat;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", enabled=" + enabled +
+                ", userContactInfo=" + userContactInfo +
+                ", username='" + username + '\'' +
+                ", encryptedPassword='" + encryptedpassword + '\'' +
+                ", firstName='" + firstname + '\'' +
+                ", lastName='" + lastname + '\'' +
+                ", title='" + title + '\'' +
+                ", jobTitle='" + jobtitle + '\'' +
+                ", managerUserId=" + manageruserid +
+                ", createdBy=" + createdby +
+                ", createdAt=" + createdat +
+                ", updatedAt=" + updatedat +
+                '}';
+    }
 }
