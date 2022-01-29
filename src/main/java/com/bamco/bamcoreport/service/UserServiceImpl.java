@@ -3,6 +3,7 @@ package com.bamco.bamcoreport.service;
 import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.entity.UserEntity;
 import com.bamco.bamcoreport.repository.UserRepository;
+import com.bamco.bamcoreport.response.UserResponse;
 import com.bamco.bamcoreport.service.mapper.IMapClassWithDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -41,16 +42,15 @@ public class UserServiceImpl implements UserSevice {
             return userDto;
         }
     }
-
+    @Override
     public UserDto updateUser(long id, UserDto userDto) {
         UserEntity userEntity = this.userRepo.findById(id);
         if (userEntity == null) {
             throw new RuntimeException("null");
         } else {
-            userEntity.setFirstname(userDto.getFirstName());
-            userEntity.setLastname(userDto.getLastName());
+            userEntity.setFirstname(userDto.getFirstname());
+            userEntity.setLastname(userDto.getLastname());
             userEntity.setEncryptedpassword(userDto.getPassword());
-
             UserEntity userEn = (UserEntity)this.userRepo.save(userEntity);
             UserDto userD = new UserDto();
             BeanUtils.copyProperties(userEn, userD);
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserSevice {
         }
     }
 
-
+     @Override
     public void deleteUser(long id) {
         UserEntity userEntity = this.userRepo.findById(id);
         if (userEntity == null) {
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserSevice {
 
     @Override
     public List<UserDto> getAllUsers() {
-        List<UserEntity> users = userRepo.findAll();
+        List<UserEntity> users = this.userRepo.findAll();
         return userMapping.convertListToListDto(users,UserDto.class);
     }
 }

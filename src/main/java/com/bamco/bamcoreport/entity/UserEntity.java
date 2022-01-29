@@ -1,6 +1,9 @@
 package com.bamco.bamcoreport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,9 +16,7 @@ import java.util.Date;
 @Entity(
         name = "users"
 )
-public class UserEntity implements Serializable {
-
-    private static final long serialVersionUID = 6296269820140043729L;
+public class UserEntity  {
 
     @Id
     @GeneratedValue(
@@ -69,10 +70,9 @@ public class UserEntity implements Serializable {
     )
     private String jobtitle;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional=true)
     @JoinColumn(
-            name = "manageruserid",
-            nullable = true
+            name = "manageruserid"
     )
     private UserEntity manageruserid;
 
@@ -83,13 +83,14 @@ public class UserEntity implements Serializable {
     )
     private UserEntity createdby;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "createdat", nullable = false, updatable = false)
     private LocalDateTime createdat;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updatedat")
     private LocalDateTime updatedat;
+
 
     public UserEntity(){
 

@@ -5,9 +5,7 @@ import com.bamco.bamcoreport.entity.UserEntity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class UserDto implements Serializable {
-
-    private static final long serialVersionUID = -5229438475552121731L;
+public class UserDto  {
 
     private long id;
     private boolean enable = false;
