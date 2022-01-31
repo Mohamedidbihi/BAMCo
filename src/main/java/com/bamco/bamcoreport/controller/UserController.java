@@ -36,12 +36,10 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userRequest) throws Exception {
-        ModelMapper modelMapper = new ModelMapper();
-        //UserEntity userDto = (UserEntity)modelMapper.map(userRequest, UserEntity.class);
+
         UserDto createUser = this.userService.createUser(userRequest);
-     //   UserResponse userRes = (UserResponse)modelMapper.map(createUser, UserResponse.class);
         return new ResponseEntity(createUser, HttpStatus.CREATED);
 
     }

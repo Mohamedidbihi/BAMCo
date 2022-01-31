@@ -1,19 +1,23 @@
 package com.bamco.bamcoreport.service;
 
+import com.bamco.bamcoreport.dto.GroupDto;
 import com.bamco.bamcoreport.entity.Group;
 
 import java.util.List;
 
 public interface IApplicationServiceCrud {
 
-    List<Group> findAllGroups();
+    List<GroupDto> findAllGroups();
 
-    Group findGroupById(long id);
+    GroupDto findGroupById(long id);
 
-    Group addGroup(Group r);
+    GroupDto addGroup(GroupDto r);
 
     boolean deleteGroup(long id);
 
-    Group updateGroup(Group r, long id);
+    GroupDto updateGroup(GroupDto r, long id);
+
+
+
 
 }

@@ -23,11 +23,13 @@ public class UserServiceImpl implements UserSevice {
 
     public UserDto createUser(UserDto userDto) {
 
-        ModelMapper mp = new ModelMapper();
         UserEntity userRequest = userMapping.convertToEntity(userDto,UserEntity.class);
+        UserDto getManagerUserId = this.getUserById(userRequest.getManageruserid().getId());
+        userRequest.setManageruserid(userMapping.convertToEntity(getManagerUserId,UserEntity.class));
+        UserDto getCreatedBy = this.getUserById(userRequest.getCreatedby().getId());
+        userRequest.setCreatedby(userMapping.convertToEntity(getCreatedBy,UserEntity.class));
         UserEntity user = this.userRepo.save(userRequest);
-        //UserDto userResponse = userMapping.convertToDto(user, UserDto.class);
-        UserDto userResponse = (UserDto)mp.map(user, UserDto.class);
+        UserDto userResponse = userMapping.convertToDto(user, UserDto.class);
         return userResponse;
     }
 
