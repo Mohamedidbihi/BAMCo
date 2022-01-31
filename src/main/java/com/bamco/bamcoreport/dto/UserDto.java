@@ -1,20 +1,17 @@
 package com.bamco.bamcoreport.dto;
-
 import com.bamco.bamcoreport.entity.UserEntity;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class UserDto  {
 
     private long id;
-    private boolean enable = false;
+    private boolean enabled ;
     private String username;
-    private String password;
+    private String encryptedpassword;
     private String firstname;
     private String lastname;
     private String title;
-    private String jobTitle;
+    private String jobtitle;
     private UserEntity manageruserid;
     private UserEntity createdby;
     private LocalDateTime createdat;
@@ -32,12 +29,12 @@ public class UserDto  {
         this.id = id;
     }
 
-    public boolean isEnable() {
-        return enable;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getUsername() {
@@ -48,12 +45,12 @@ public class UserDto  {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEncryptedpassword() {
+        return encryptedpassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEncryptedpassword(String encryptedpassword) {
+        this.encryptedpassword = encryptedpassword;
     }
 
     public String getFirstname() {
@@ -80,12 +77,12 @@ public class UserDto  {
         this.title = title;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public String getJobtitle() {
+        return jobtitle;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setJobtitle(String jobtitle) {
+        this.jobtitle = jobtitle;
     }
 
     public UserEntity getManageruserid() {

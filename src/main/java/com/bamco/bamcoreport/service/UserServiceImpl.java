@@ -3,15 +3,11 @@ package com.bamco.bamcoreport.service;
 import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.entity.UserEntity;
 import com.bamco.bamcoreport.repository.UserRepository;
-import com.bamco.bamcoreport.response.UserResponse;
 import com.bamco.bamcoreport.service.mapper.IMapClassWithDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -25,11 +21,14 @@ public class UserServiceImpl implements UserSevice {
     @Autowired
     IMapClassWithDto<UserEntity, UserDto> userMapping;
 
-    public UserEntity createUser(UserEntity userDto) {
-            if (userDto != null) {
-                this.userRepo.save(userDto);
-            }
-            return userDto;
+    public UserDto createUser(UserDto userDto) {
+
+        ModelMapper mp = new ModelMapper();
+        UserEntity userRequest = userMapping.convertToEntity(userDto,UserEntity.class);
+        UserEntity user = this.userRepo.save(userRequest);
+        //UserDto userResponse = userMapping.convertToDto(user, UserDto.class);
+        UserDto userResponse = (UserDto)mp.map(user, UserDto.class);
+        return userResponse;
     }
 
     public UserDto getUserById(long id) {
@@ -50,7 +49,7 @@ public class UserServiceImpl implements UserSevice {
         } else {
             userEntity.setFirstname(userDto.getFirstname());
             userEntity.setLastname(userDto.getLastname());
-            userEntity.setEncryptedpassword(userDto.getPassword());
+            userEntity.setEncryptedpassword(userDto.getEncryptedpassword());
             UserEntity userEn = (UserEntity)this.userRepo.save(userEntity);
             UserDto userD = new UserDto();
             BeanUtils.copyProperties(userEn, userD);
@@ -71,6 +70,11 @@ public class UserServiceImpl implements UserSevice {
     @Override
     public List<UserDto> getAllUsers() {
         List<UserEntity> users = this.userRepo.findAll();
-        return userMapping.convertListToListDto(users,UserDto.class);
+        Type listType = (new TypeToken<List<UserDto>>() {
+        }).getType();
+        List<UserDto> userDtos = (List)(new ModelMapper()).map(users, listType);
+        return userDtos;
+
+      //Solution2 return userMapping.convertListToListDto(users,UserDto.class);
     }
 }

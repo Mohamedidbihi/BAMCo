@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity (name = "groups")
 public class Group implements Serializable {
-
     private static final long serialVersionUID = -5051985663615982848L;
     @Id
     @GeneratedValue(
@@ -27,14 +26,16 @@ public class Group implements Serializable {
 
     @Column(
             nullable = false,
-            length = 255
+            length = 255,
+            name = "parenthpath"
     )
     private String parentPath;
 
     @Column(
             nullable = false,
             length = 255,
-            unique = true
+            unique = true,
+            name = "displayname"
     )
     private String displayName;
 
@@ -46,17 +47,17 @@ public class Group implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "created_by",
+            name = "createdby",
             nullable = false
     )
     private UserEntity createdBy;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "createdat", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updatedat")
     private LocalDateTime updatedAt;
 
     public Group() {

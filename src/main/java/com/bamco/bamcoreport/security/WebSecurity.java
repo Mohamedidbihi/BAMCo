@@ -14,7 +14,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
         http.authorizeRequests((requests) -> {
-             requests.antMatchers(HttpMethod.GET,"/users/all").permitAll();
+             requests.antMatchers(HttpMethod.POST,"/users/add").permitAll();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl)requests.anyRequest()).authenticated();
         });
     }

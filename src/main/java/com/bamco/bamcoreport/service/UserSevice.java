@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserSevice  {
 
-    UserEntity createUser(UserEntity userDto);
+    UserDto createUser(UserDto userDto);
 
     UserDto getUserById(long id);
 

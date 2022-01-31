@@ -27,7 +27,7 @@ public class UserEntity  {
     @Column(
             nullable = true
     )
-    private Boolean enabled = true;
+    private Boolean enabled ;
 
     @JsonIgnore
     @OneToOne(targetEntity = UserContactInfo.class, mappedBy = "userid")
@@ -70,23 +70,24 @@ public class UserEntity  {
     )
     private String jobtitle;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional=true)
+    @ManyToOne()
     @JoinColumn(
             name = "manageruserid"
     )
     private UserEntity manageruserid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(
-            name = "createdby",
-            nullable = false
+            name = "createdby"
     )
     private UserEntity createdby;
 
+    @JsonIgnore
     @CreationTimestamp
-    @Column(name = "createdat", nullable = false, updatable = false)
+    @Column(name = "createdat", updatable = false)
     private LocalDateTime createdat;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "updatedat")
     private LocalDateTime updatedat;
@@ -94,6 +95,22 @@ public class UserEntity  {
 
     public UserEntity(){
 
+    }
+
+    public UserEntity(long id, Boolean enabled, UserContactInfo userContactInfo, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby, LocalDateTime createdat, LocalDateTime updatedat) {
+        this.id = id;
+        this.enabled = enabled;
+        this.userContactInfo = userContactInfo;
+        this.username = username;
+        this.encryptedpassword = encryptedpassword;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.title = title;
+        this.jobtitle = jobtitle;
+        this.manageruserid = manageruserid;
+        this.createdby = createdby;
+        this.createdat = createdat;
+        this.updatedat = updatedat;
     }
 
     public long getId() {
@@ -120,12 +137,12 @@ public class UserEntity  {
         this.userContactInfo = userContactInfo;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEncryptedpassword() {
@@ -207,15 +224,15 @@ public class UserEntity  {
                 ", enabled=" + enabled +
                 ", userContactInfo=" + userContactInfo +
                 ", username='" + username + '\'' +
-                ", encryptedPassword='" + encryptedpassword + '\'' +
-                ", firstName='" + firstname + '\'' +
-                ", lastName='" + lastname + '\'' +
+                ", encryptedpassword='" + encryptedpassword + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", title='" + title + '\'' +
-                ", jobTitle='" + jobtitle + '\'' +
-                ", managerUserId=" + manageruserid +
-                ", createdBy=" + createdby +
-                ", createdAt=" + createdat +
-                ", updatedAt=" + updatedat +
+                ", jobtitle='" + jobtitle + '\'' +
+                ", manageruserid=" + manageruserid +
+                ", createdby=" + createdby +
+                ", createdat=" + createdat +
+                ", updatedat=" + updatedat +
                 '}';
     }
 }
