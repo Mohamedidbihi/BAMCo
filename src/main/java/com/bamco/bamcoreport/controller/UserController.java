@@ -50,8 +50,6 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userRequest) {
 
         UserDto updateUser = this.userService.updateUser(id, userRequest);
-        //UserResponse userRes = new UserResponse();
-       // BeanUtils.copyProperties(updateUser, userRes);
         return new ResponseEntity(updateUser, HttpStatus.ACCEPTED);
     }
 

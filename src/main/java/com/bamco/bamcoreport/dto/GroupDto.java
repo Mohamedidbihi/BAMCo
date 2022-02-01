@@ -3,17 +3,18 @@ package com.bamco.bamcoreport.dto;
 import com.bamco.bamcoreport.entity.UserEntity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class GroupDto {
 
     private  long id;
     private String name;
-    private String parentPath;
-    private String displayName;
+    private String parentpath;
+    private String displayname;
     private String description;
-    private UserEntity createdBy;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private UserEntity createdby;
+    private LocalDateTime createdat;
+    private LocalDateTime updatedat;
 
     public long getId() {
         return id;
@@ -31,20 +32,20 @@ public class GroupDto {
         this.name = name;
     }
 
-    public String getParentPath() {
-        return parentPath;
+    public String getParentpath() {
+        return parentpath;
     }
 
-    public void setParentPath(String parentPath) {
-        this.parentPath = parentPath;
+    public void setParentpath(String parentpath) {
+        this.parentpath = parentpath;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayname() {
+        return displayname;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
     }
 
     public String getDescription() {
@@ -55,28 +56,27 @@ public class GroupDto {
         this.description = description;
     }
 
-    public UserEntity getCreatedBy() {
-        return createdBy;
+    public UserEntity getCreatedby() {
+        return createdby;
     }
 
-    public void setCreatedBy(UserEntity createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedby(UserEntity createdby) {
+        this.createdby = createdby;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreatedat() {
+        return createdat;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedat(LocalDateTime createdat) {
+        this.createdat = createdat;
     }
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
+    public LocalDateTime getUpdatedat() {
+        return updatedat;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedat(LocalDateTime updatedat) {
+        this.updatedat = updatedat;
     }
-
 }

@@ -1,8 +1,8 @@
 package com.bamco.bamcoreport.entity;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -45,20 +45,22 @@ public class Group implements Serializable {
     )
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(
             name = "createdby",
             nullable = false
     )
-    private UserEntity createdBy;
+    private UserEntity createdby;
 
-    @CreatedDate
-    @Column(name = "createdat", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @JsonIgnore
+    @CreationTimestamp
+    @Column(name = "createdat", updatable = false)
+    private LocalDateTime createdat;
 
-    @LastModifiedDate
+    @JsonIgnore
+    @UpdateTimestamp
     @Column(name = "updatedat")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedat;
 
     public Group() {
 
@@ -104,28 +106,28 @@ public class Group implements Serializable {
         this.description = description;
     }
 
-    public UserEntity getCreatedBy() {
-        return createdBy;
+    public UserEntity getCreatedby() {
+        return createdby;
     }
 
-    public void setCreatedBy(UserEntity createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedby(UserEntity createdby) {
+        this.createdby = createdby;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreatedat() {
+        return createdat;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedat(LocalDateTime createdat) {
+        this.createdat = createdat;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public LocalDateTime getUpdatedat() {
+        return updatedat;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedat(LocalDateTime updatedat) {
+        this.updatedat = updatedat;
     }
 
     @Override
@@ -136,9 +138,9 @@ public class Group implements Serializable {
                 ", parentPath='" + parentPath + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", description='" + description + '\'' +
-                ", createdBy=" + createdBy +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", createdby=" + createdby +
+                ", createdat=" + createdat +
+                ", updatedat=" + updatedat +
                 '}';
     }
 }

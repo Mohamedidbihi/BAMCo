@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -21,8 +22,12 @@ public class UserServiceImpl implements UserSevice {
     @Autowired
     IMapClassWithDto<UserEntity, UserDto> userMapping;
 
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public UserDto createUser(UserDto userDto) {
 
+        userDto.setEncryptedpassword(bCryptPasswordEncoder.encode(userDto.getEncryptedpassword()));
         UserEntity userRequest = userMapping.convertToEntity(userDto,UserEntity.class);
         UserDto getManagerUserId = this.getUserById(userRequest.getManageruserid().getId());
         userRequest.setManageruserid(userMapping.convertToEntity(getManagerUserId,UserEntity.class));
@@ -47,11 +52,11 @@ public class UserServiceImpl implements UserSevice {
     public UserDto updateUser(long id, UserDto userDto) {
         UserEntity userEntity = this.userRepo.findById(id);
         if (userEntity == null) {
-            throw new RuntimeException("null");
+            throw new RuntimeException("No user was found!");
         } else {
             userEntity.setFirstname(userDto.getFirstname());
             userEntity.setLastname(userDto.getLastname());
-            userEntity.setEncryptedpassword(userDto.getEncryptedpassword());
+            userEntity.setEncryptedpassword(this.bCryptPasswordEncoder.encode(userDto.getEncryptedpassword()));
             UserEntity userEn = (UserEntity)this.userRepo.save(userEntity);
             UserDto userD = new UserDto();
             BeanUtils.copyProperties(userEn, userD);
@@ -76,7 +81,6 @@ public class UserServiceImpl implements UserSevice {
         }).getType();
         List<UserDto> userDtos = (List)(new ModelMapper()).map(users, listType);
         return userDtos;
-
       //Solution2 return userMapping.convertListToListDto(users,UserDto.class);
     }
 }

@@ -1,5 +1,8 @@
 package com.bamco.bamcoreport.dto;
 import com.bamco.bamcoreport.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
 
 public class UserDto  {
@@ -92,6 +95,7 @@ public class UserDto  {
     public void setManageruserid(UserEntity manageruserid) {
         this.manageruserid = manageruserid;
     }
+
 
     public UserEntity getCreatedby() {
         return createdby;

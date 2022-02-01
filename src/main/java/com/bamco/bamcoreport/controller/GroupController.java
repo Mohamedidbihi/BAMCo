@@ -1,10 +1,7 @@
 package com.bamco.bamcoreport.controller;
 
 import com.bamco.bamcoreport.dto.GroupDto;
-import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.service.IApplicationServiceCrud;
-import com.bamco.bamcoreport.service.UserSevice;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +25,13 @@ public class GroupController {
     }
 
     @GetMapping({"/all"})
-    public ResponseEntity<List<GroupDto>> getAllUsers() {
-        List<GroupDto> groups = appService.findAllGroups();
+    public ResponseEntity<List<GroupDto>> getAllGroups() {
+        List<GroupDto> groups = this.appService.findAllGroups();
         return ResponseEntity.ok(groups);
     }
 
     @PostMapping
-    public ResponseEntity<GroupDto> createUser(@RequestBody GroupDto groupRequest) throws Exception {
+    public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupRequest) throws Exception {
 
         GroupDto createGroup = this.appService.addGroup(groupRequest);
         return new ResponseEntity(createGroup, HttpStatus.CREATED);
@@ -44,8 +41,7 @@ public class GroupController {
     @PatchMapping(
             path = {"/{id}"}
     )
-    public ResponseEntity<GroupDto> updateUser(@PathVariable Long id, @RequestBody GroupDto groupDto) {
-
+    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id, @RequestBody GroupDto groupDto) {
         GroupDto updateGroup = this.appService.updateGroup(groupDto,id);
         return new ResponseEntity(updateGroup, HttpStatus.ACCEPTED);
     }
@@ -53,7 +49,7 @@ public class GroupController {
     @DeleteMapping(
             path = {"/{id}"}
     )
-    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteGroup(@PathVariable Long id) {
         this.appService.deleteGroup(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
