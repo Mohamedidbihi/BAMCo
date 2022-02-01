@@ -39,7 +39,7 @@ public class Profile implements Serializable {
             columnDefinition="TEXT")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "created_by",
             nullable = false
@@ -51,7 +51,7 @@ public class Profile implements Serializable {
     @Column(
             name = "created_at",
             updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @JsonIgnore
     @UpdateTimestamp
@@ -105,11 +105,11 @@ public class Profile implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

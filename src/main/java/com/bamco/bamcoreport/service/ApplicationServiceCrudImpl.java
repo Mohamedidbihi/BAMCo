@@ -1,17 +1,8 @@
 package com.bamco.bamcoreport.service;
 
-import com.bamco.bamcoreport.dto.GroupDto;
-import com.bamco.bamcoreport.dto.ProfileDto;
-import com.bamco.bamcoreport.dto.RoleDto;
-import com.bamco.bamcoreport.dto.UserDto;
-import com.bamco.bamcoreport.entity.Group;
-import com.bamco.bamcoreport.entity.Profile;
-import com.bamco.bamcoreport.entity.Role;
-import com.bamco.bamcoreport.entity.UserEntity;
-import com.bamco.bamcoreport.repository.GroupRepository;
-import com.bamco.bamcoreport.repository.ProfileRepository;
-import com.bamco.bamcoreport.repository.RoleRepository;
-import com.bamco.bamcoreport.repository.UserRepository;
+import com.bamco.bamcoreport.dto.*;
+import com.bamco.bamcoreport.entity.*;
+import com.bamco.bamcoreport.repository.*;
 import com.bamco.bamcoreport.service.mapper.IMapClassWithDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -38,6 +29,9 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     UserRepository userRepo;
 
     @Autowired
+    MembershipRepository membershipRepo;
+
+    @Autowired
     IMapClassWithDto<Group, GroupDto> groupMapping;
 
     @Autowired
@@ -48,6 +42,9 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
     @Autowired
     IMapClassWithDto<Profile, ProfileDto> profileMapping;
+
+    @Autowired
+    IMapClassWithDto<UserMembership, MembershipDto> membershipMapping;
 
     @Override
     public List<GroupDto> findAllGroups() {
@@ -237,4 +234,89 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             return profileResponse;
         }
     }
+
+
+
+
+
+    @Override
+    public List<MembershipDto> getAllMemberships() {
+        List<UserMembership> userMemberships = this.membershipRepo.findAll();
+        Type listType = (new TypeToken<List<RoleDto>>() {
+        }).getType();
+        List<MembershipDto> membershipDtos = (List)(new ModelMapper()).map(userMemberships, listType);
+
+        return membershipDtos;
+    }
+
+    @Override
+    public MembershipDto findMembershipById(long id) {
+        UserMembership membership = this.membershipRepo.findById(id).get();
+        if (membership == null) {
+            throw new RuntimeException("No membership was found!");
+        } else {
+            MembershipDto membershipDto = new MembershipDto();
+            BeanUtils.copyProperties(membership, membershipDto);
+            return membershipDto;
+        }
+    }
+
+    @Override
+    public MembershipDto addMembership(MembershipDto membershipDto) {
+
+        UserMembership membershipRequest = membershipMapping.convertToEntity(membershipDto, UserMembership.class);
+
+        UserEntity getUser = this.userRepo.findById(membershipDto.getUserid().getId());
+        membershipRequest.setUserid(getUser);
+        UserEntity getAssignedBy = this.userRepo.findById(membershipDto.getAssignedBy().getId());
+        membershipRequest.setAssignedBy(getAssignedBy);
+        Role getRole = this.roleRepo.findById(membershipDto.getRoleId().getId()).get();
+        membershipRequest.setRoleId(getRole);
+        Group getGroup = this.groupRepo.findById(membershipDto.getGroupId().getId());
+        membershipRequest.setGroupId(getGroup);
+
+        UserMembership membership = this.membershipRepo.save(membershipRequest);
+        MembershipDto membershipResponse = membershipMapping.convertToDto(membership, MembershipDto.class);
+        return membershipResponse;
+    }
+
+    @Override
+    public boolean deleteMembership(long id) {
+        UserMembership membership = this.membershipRepo.findById(id).get();
+        if (membership == null) {
+            throw new RuntimeException("No membership was found!");
+        } else {
+            this.membershipRepo.delete(membership);
+        }
+        return true;
+    }
+
+    @Override
+    public MembershipDto updateMembership(MembershipDto membershipDto, long id) {
+        UserMembership membership = this.membershipRepo.findById(id).get();
+        if (membership == null) {
+            throw new RuntimeException("No membership was found!");
+        } else {
+            membership.setUserid(membershipDto.getUserid());
+            membership.setAssignedBy(membershipDto.getAssignedBy());
+            membership.setGroupId(membershipDto.getGroupId());
+            membership.setRoleId(membershipDto.getRoleId());
+
+            UserEntity getUser = this.userRepo.findById(membershipDto.getUserid().getId());
+            membership.setUserid(getUser);
+            UserEntity getAssignedBy = this.userRepo.findById(membershipDto.getAssignedBy().getId());
+            membership.setAssignedBy(getAssignedBy);
+            Role getRole = this.roleRepo.findById(membershipDto.getRoleId().getId()).get();
+            membership.setRoleId(getRole);
+            Group getGroup = this.groupRepo.findById(membershipDto.getGroupId().getId());
+            membership.setGroupId(getGroup);
+
+            UserMembership updatedMembership = (UserMembership) this.membershipRepo.save(membership);
+            MembershipDto membershipResponse = new MembershipDto();
+            BeanUtils.copyProperties(updatedMembership, membershipResponse);
+            return membershipResponse;
+        }
+    }
+
 }
+
