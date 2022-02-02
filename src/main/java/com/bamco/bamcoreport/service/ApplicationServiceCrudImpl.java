@@ -183,7 +183,7 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     @Override
     public List<ProfileDto> getAllProfiles() {
         List<Profile> profiles = this.profileRepo.findAll();
-        Type listType = (new TypeToken<List<RoleDto>>() {
+        Type listType = (new TypeToken<List<ProfileDto>>() {
         }).getType();
         List<ProfileDto> profileDtos = (List)(new ModelMapper()).map(profiles, listType);
         return profileDtos;
@@ -255,7 +255,7 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     @Override
     public List<MembershipDto> getAllMemberships() {
         List<UserMembership> userMemberships = this.membershipRepo.findAll();
-        Type listType = (new TypeToken<List<RoleDto>>() {
+        Type listType = (new TypeToken<List<MembershipDto>>() {
         }).getType();
         List<MembershipDto> membershipDtos = (List)(new ModelMapper()).map(userMemberships, listType);
 

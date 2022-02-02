@@ -36,7 +36,7 @@ public class UserContactInfoController {
     }
 
     @PatchMapping(path = {"/{id}"})
-    public ResponseEntity<UserContactInfoDto> updateRole( @RequestBody UserContactInfoDto userContactInfoRequest, @PathVariable Long id) {
+    public ResponseEntity<UserContactInfoDto> updateUserContactInfo( @RequestBody UserContactInfoDto userContactInfoRequest, @PathVariable Long id) {
 
         UserContactInfoDto updateUserContactInfo = this.appService.updateUserContactInfo(userContactInfoRequest,id);
         return new ResponseEntity(updateUserContactInfo, HttpStatus.ACCEPTED);

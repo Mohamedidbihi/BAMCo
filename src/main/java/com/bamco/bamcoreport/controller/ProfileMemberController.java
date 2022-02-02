@@ -1,7 +1,6 @@
 package com.bamco.bamcoreport.controller;
 
 import com.bamco.bamcoreport.dto.ProfileMemberDto;
-import com.bamco.bamcoreport.dto.RoleDto;
 import com.bamco.bamcoreport.service.IApplicationServiceCrud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,13 +22,13 @@ public class ProfileMemberController {
     }
 
     @GetMapping({"/all"})
-    public ResponseEntity<List<ProfileMemberDto>> getAllRoles() {
+    public ResponseEntity<List<ProfileMemberDto>> getAllProfileMembers() {
         List<ProfileMemberDto> profileMembers = appService.getAllProfileMembers();
         return ResponseEntity.ok(profileMembers);
     }
 
     @PostMapping
-    public ResponseEntity<RoleDto> createRole(@RequestBody ProfileMemberDto profileMemberRequest) throws Exception {
+    public ResponseEntity<ProfileMemberDto> createProfileMember(@RequestBody ProfileMemberDto profileMemberRequest) throws Exception {
 
         ProfileMemberDto createdProfileMember = this.appService.addProfileMember(profileMemberRequest);
         return new ResponseEntity(createdProfileMember, HttpStatus.CREATED);
