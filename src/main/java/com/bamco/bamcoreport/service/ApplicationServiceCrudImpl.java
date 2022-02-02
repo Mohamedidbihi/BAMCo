@@ -32,6 +32,12 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     MembershipRepository membershipRepo;
 
     @Autowired
+    ProfileMemberRepository profileMemberRepo;
+
+    @Autowired
+    UserContactInfoRepository userContactInfoRepo;
+
+    @Autowired
     IMapClassWithDto<Group, GroupDto> groupMapping;
 
     @Autowired
@@ -45,6 +51,13 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
     @Autowired
     IMapClassWithDto<UserMembership, MembershipDto> membershipMapping;
+
+    @Autowired
+    IMapClassWithDto<UserContactInfo, UserContactInfoDto> userContactInfoMapping;
+
+    @Autowired
+    IMapClassWithDto<ProfileMember, ProfileMemberDto> profileMemberMapping;
+
 
     @Override
     public List<GroupDto> findAllGroups() {
@@ -315,6 +328,148 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             MembershipDto membershipResponse = new MembershipDto();
             BeanUtils.copyProperties(updatedMembership, membershipResponse);
             return membershipResponse;
+        }
+    }
+
+
+
+
+
+    @Override
+    public List<UserContactInfoDto> getAllUserContactInfo() {
+        List<UserContactInfo> userContactInfo = this.userContactInfoRepo.findAll();
+        Type listType = (new TypeToken<List<UserDto>>() {
+        }).getType();
+        List<UserContactInfoDto> userContactInfoDtos = (List)(new ModelMapper()).map(userContactInfo, listType);
+
+        return userContactInfoDtos;
+    }
+
+    @Override
+    public UserContactInfoDto findUserContactInfoById(long id) {
+        UserContactInfo userContactInfo = this.userContactInfoRepo.findById(id).get();
+        if (userContactInfo == null) {
+            throw new RuntimeException("No contact info were found!");
+        } else {
+            UserContactInfoDto userContactInfoDto = new UserContactInfoDto();
+            BeanUtils.copyProperties(userContactInfo, userContactInfoDto);
+            return userContactInfoDto;
+        }
+    }
+
+    @Override
+    public UserContactInfoDto addUserContactInfo(UserContactInfoDto userContactInfoDto) {
+        UserContactInfo userContactInfoRequest = userContactInfoMapping.convertToEntity(userContactInfoDto, UserContactInfo.class);
+
+        UserEntity getUser = this.userRepo.findById(userContactInfoDto.getUserid().getId());
+        userContactInfoRequest.setUserEntity(getUser);
+
+        UserContactInfo userContactInfo = this.userContactInfoRepo.save(userContactInfoRequest);
+        UserContactInfoDto userContactInfoResponse = userContactInfoMapping.convertToDto(userContactInfo, UserContactInfoDto.class);
+        return userContactInfoResponse;
+    }
+
+
+    @Override
+    public UserContactInfoDto updateUserContactInfo(UserContactInfoDto userContactInfoDto, long id) {
+        UserContactInfo userContactInfo = this.userContactInfoRepo.findById(id).get();
+        if (userContactInfo == null) {
+            throw new RuntimeException("No contact info were found!");
+        } else {
+            userContactInfo.setEmail(userContactInfoDto.getEmail());
+            userContactInfo.setNumber(userContactInfoDto.getNumber());
+            userContactInfo.setPhone(userContactInfoDto.getPhone());
+            userContactInfo.setFax(userContactInfoDto.getFax());
+            userContactInfo.setCountry(userContactInfoDto.getCountry());
+            userContactInfo.setState(userContactInfoDto.getState());
+            userContactInfo.setCity(userContactInfoDto.getCity());
+            userContactInfo.setAdress(userContactInfoDto.getAdress());
+            userContactInfo.setZipcode(userContactInfoDto.getZipcode());
+            userContactInfo.setBuilding(userContactInfoDto.getBuilding());
+            userContactInfo.setRoom(userContactInfoDto.getRoom());
+            userContactInfo.setPersonal(userContactInfoDto.getPersonal());
+            userContactInfo.setWebsite(userContactInfoDto.getWebsite());
+
+            UserEntity getUser = this.userRepo.findById(userContactInfoDto.getUserid().getId());
+            userContactInfo.setUserEntity(getUser);
+
+            UserContactInfo updatedUserContactInfo = (UserContactInfo) this.userContactInfoRepo.save(userContactInfo);
+            UserContactInfoDto userContactInfoResponse = new UserContactInfoDto();
+            BeanUtils.copyProperties(updatedUserContactInfo, userContactInfoResponse);
+            return userContactInfoResponse;
+        }
+    }
+
+
+
+
+
+    @Override
+    public List<ProfileMemberDto> getAllProfileMembers() {
+        List<ProfileMember> profileMembers = this.profileMemberRepo.findAll();
+        Type listType = (new TypeToken<List<UserDto>>() {
+        }).getType();
+        List<ProfileMemberDto> profileMemberDtos = (List)(new ModelMapper()).map(profileMembers, listType);
+
+        return profileMemberDtos;
+    }
+
+    @Override
+    public ProfileMemberDto findProfileMemberById(long id) {
+        ProfileMember profileMember = this.profileMemberRepo.findById(id).get();
+        if (profileMember == null) {
+            throw new RuntimeException("No profile member was found!");
+        } else {
+            ProfileMemberDto profileMemberDto = new ProfileMemberDto();
+            BeanUtils.copyProperties(profileMember, profileMemberDto);
+            return profileMemberDto;
+        }
+    }
+
+    @Override
+    public ProfileMemberDto addProfileMember(ProfileMemberDto profileMemberDto) {
+        ProfileMember profileMemberRequest = profileMemberMapping.convertToEntity(profileMemberDto, ProfileMember.class);
+
+        UserEntity getUser = this.userRepo.findById(profileMemberDto.getUserId().getId());
+        profileMemberRequest.setUserId(getUser);
+        Role getRole = this.roleRepo.findById(profileMemberDto.getRoleId().getId()).get();
+        profileMemberRequest.setRoleId(getRole);
+        Group getGroup = this.groupRepo.findById(profileMemberDto.getGroupId().getId());
+        profileMemberRequest.setGroupId(getGroup);
+        Profile getProfile = this.profileRepo.findById(profileMemberDto.getProfileId().getId()).get();
+        profileMemberRequest.setProfileId(getProfile);
+
+        ProfileMember profileMember = this.profileMemberRepo.save(profileMemberRequest);
+        ProfileMemberDto profileMemberResponse = profileMemberMapping.convertToDto(profileMember, ProfileMemberDto.class);
+        return profileMemberResponse;
+    }
+
+    @Override
+    public boolean deleteProfileMember(long id) {
+        ProfileMember profileMember = this.profileMemberRepo.findById(id).get();
+        if (profileMember == null) {
+            throw new RuntimeException("No profile member was found!");
+        } else {
+            this.profileMemberRepo.delete(profileMember);
+        }
+        return true;
+    }
+
+    @Override
+    public ProfileMemberDto updateProfileMember(ProfileMemberDto profileMemberDto, long id) {
+        ProfileMember profileMember = this.profileMemberRepo.findById(id).get();
+        if (profileMember == null) {
+            throw new RuntimeException("No profile member was found!");
+        } else {
+            profileMember.setUserId(profileMemberDto.getUserId());
+            profileMember.setRoleId(profileMemberDto.getRoleId());
+            profileMember.setGroupId(profileMemberDto.getGroupId());
+            profileMember.setProfileId(profileMemberDto.getProfileId());
+
+            ProfileMember updatedProfileMember = (ProfileMember) this.profileMemberRepo.save(profileMember);
+            ProfileMemberDto profileMemberResponse = new ProfileMemberDto();
+            BeanUtils.copyProperties(updatedProfileMember, profileMemberResponse);
+            return profileMemberResponse;
         }
     }
 

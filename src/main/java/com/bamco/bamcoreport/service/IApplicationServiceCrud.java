@@ -1,9 +1,6 @@
 package com.bamco.bamcoreport.service;
 
-import com.bamco.bamcoreport.dto.GroupDto;
-import com.bamco.bamcoreport.dto.MembershipDto;
-import com.bamco.bamcoreport.dto.ProfileDto;
-import com.bamco.bamcoreport.dto.RoleDto;
+import com.bamco.bamcoreport.dto.*;
 import com.bamco.bamcoreport.entity.Group;
 
 import java.util.List;
@@ -52,5 +49,25 @@ public interface IApplicationServiceCrud {
     boolean deleteMembership(long id);
 
     MembershipDto updateMembership(MembershipDto r, long id);
+
+
+    List<UserContactInfoDto> getAllUserContactInfo();
+
+    UserContactInfoDto findUserContactInfoById(long id);
+
+    UserContactInfoDto addUserContactInfo(UserContactInfoDto r);
+
+    UserContactInfoDto updateUserContactInfo(UserContactInfoDto r, long id);
+
+
+    List<ProfileMemberDto> getAllProfileMembers();
+
+    ProfileMemberDto findProfileMemberById(long id);
+
+    ProfileMemberDto addProfileMember(ProfileMemberDto r);
+
+    boolean deleteProfileMember(long id);
+
+    ProfileMemberDto updateProfileMember(ProfileMemberDto r, long id);
 
 }

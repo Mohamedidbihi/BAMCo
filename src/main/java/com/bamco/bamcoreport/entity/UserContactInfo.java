@@ -19,7 +19,7 @@ public class UserContactInfo implements Serializable {
     private Long id;
 
     @JsonIgnore
-    @OneToOne(targetEntity = UserEntity.class,cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     @JoinColumn(
             name = "userid",
             nullable = false,
