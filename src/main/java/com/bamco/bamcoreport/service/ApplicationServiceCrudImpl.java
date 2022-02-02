@@ -53,10 +53,10 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     IMapClassWithDto<UserMembership, MembershipDto> membershipMapping;
 
     @Autowired
-    IMapClassWithDto<UserContactInfo, UserContactInfoDto> userContactInfoMapping;
+    IMapClassWithDto<ProfileMember, ProfileMemberDto> profileMemberMapping;
 
     @Autowired
-    IMapClassWithDto<ProfileMember, ProfileMemberDto> profileMemberMapping;
+    IMapClassWithDto<UserContactInfo, UserContactInfoDto> userContactInfoMapping;
 
 
     @Override
@@ -82,10 +82,15 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
     @Override
     public GroupDto addGroup(GroupDto groupdto) {
-        Group groupRequest = groupMapping.convertToEntity(groupdto,Group.class);
+       // Group groupRequest = groupMapping.convertToEntity(groupdto,Group.class);
+        Group groupRequest = (Group) (new ModelMapper()).map(groupdto, Group.class);
         Group group = this.groupRepo.save(groupRequest);
-        GroupDto userResponse = groupMapping.convertToDto(group, GroupDto.class);
-        return userResponse;
+
+        UserEntity getUser = this.userRepo.findById(group.getCreatedby().getId());
+        groupRequest.setCreatedby(getUser);
+
+        GroupDto groupResp = (GroupDto) (new ModelMapper()).map(group, GroupDto.class);
+        return groupResp;
     }
 
     @Override
@@ -116,10 +121,6 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
         }
     }
 
-
-
-
-
     @Override
     public List<RoleDto> getAllRoles() {
         List<Role> roles = this.roleRepo.findAll();
@@ -143,7 +144,10 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
     @Override
     public RoleDto addRole(RoleDto roleDto) {
+
         Role roleRequest = roleMapping.convertToEntity(roleDto, Role.class);
+        UserEntity getManagerUserId = this.userRepo.findById(roleRequest.getCreatedBy().getId());
+        roleRequest.setCreatedBy(getManagerUserId);
         Role role = this.roleRepo.save(roleRequest);
         RoleDto roleResponse = roleMapping.convertToDto(role, RoleDto.class);
         return roleResponse;
@@ -172,13 +176,11 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             Role updatedRole = (Role) this.roleRepo.save(role);
             RoleDto roleResponse = new RoleDto();
             BeanUtils.copyProperties(updatedRole, roleResponse);
+            UserEntity getManagerUserId = this.userRepo.findById(roleResponse.getCreatedBy().getId());
+            roleResponse.setCreatedBy(getManagerUserId);
             return roleResponse;
         }
     }
-
-
-
-
 
     @Override
     public List<ProfileDto> getAllProfiles() {
@@ -247,9 +249,6 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             return profileResponse;
         }
     }
-
-
-
 
 
     @Override
@@ -338,7 +337,7 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     @Override
     public List<UserContactInfoDto> getAllUserContactInfo() {
         List<UserContactInfo> userContactInfo = this.userContactInfoRepo.findAll();
-        Type listType = (new TypeToken<List<UserDto>>() {
+        Type listType = (new TypeToken<List<UserContactInfoDto>>() {
         }).getType();
         List<UserContactInfoDto> userContactInfoDtos = (List)(new ModelMapper()).map(userContactInfo, listType);
 
@@ -366,9 +365,11 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
         UserContactInfo userContactInfo = this.userContactInfoRepo.save(userContactInfoRequest);
         UserContactInfoDto userContactInfoResponse = userContactInfoMapping.convertToDto(userContactInfo, UserContactInfoDto.class);
+
+        userContactInfoResponse.setUserid(getUser);
+
         return userContactInfoResponse;
     }
-
 
     @Override
     public UserContactInfoDto updateUserContactInfo(UserContactInfoDto userContactInfoDto, long id) {
@@ -430,16 +431,17 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     public ProfileMemberDto addProfileMember(ProfileMemberDto profileMemberDto) {
         ProfileMember profileMemberRequest = profileMemberMapping.convertToEntity(profileMemberDto, ProfileMember.class);
 
-        UserEntity getUser = this.userRepo.findById(profileMemberDto.getUserId().getId());
-        profileMemberRequest.setUserId(getUser);
-        Role getRole = this.roleRepo.findById(profileMemberDto.getRoleId().getId()).get();
-        profileMemberRequest.setRoleId(getRole);
-        Group getGroup = this.groupRepo.findById(profileMemberDto.getGroupId().getId());
-        profileMemberRequest.setGroupId(getGroup);
-        Profile getProfile = this.profileRepo.findById(profileMemberDto.getProfileId().getId()).get();
-        profileMemberRequest.setProfileId(getProfile);
-
         ProfileMember profileMember = this.profileMemberRepo.save(profileMemberRequest);
+
+        UserEntity getUser = this.userRepo.findById(profileMemberDto.getUserId().getId());
+        profileMember.setUserId(getUser);
+        Role getRole = this.roleRepo.findById(profileMemberDto.getRoleId().getId()).get();
+        profileMember.setRoleId(getRole);
+        Group getGroup = this.groupRepo.findById(profileMemberDto.getGroupId().getId());
+        profileMember.setGroupId(getGroup);
+        Profile getProfile = this.profileRepo.findById(profileMemberDto.getProfileId().getId()).get();
+        profileMember.setProfileId(getProfile);
+
         ProfileMemberDto profileMemberResponse = profileMemberMapping.convertToDto(profileMember, ProfileMemberDto.class);
         return profileMemberResponse;
     }
@@ -467,8 +469,19 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             profileMember.setProfileId(profileMemberDto.getProfileId());
 
             ProfileMember updatedProfileMember = (ProfileMember) this.profileMemberRepo.save(profileMember);
+
             ProfileMemberDto profileMemberResponse = new ProfileMemberDto();
             BeanUtils.copyProperties(updatedProfileMember, profileMemberResponse);
+
+            UserEntity getUser = this.userRepo.findById(updatedProfileMember.getUserId().getId());
+            profileMemberResponse.setUserId(getUser);
+            Role getRole = this.roleRepo.findById(updatedProfileMember.getRoleId().getId()).get();
+            profileMemberResponse.setRoleId(getRole);
+            Group getGroup = this.groupRepo.findById(updatedProfileMember.getGroupId().getId());
+            profileMemberResponse.setGroupId(getGroup);
+            Profile getProfile = this.profileRepo.findById(updatedProfileMember.getProfileId().getId()).get();
+            profileMemberResponse.setProfileId(getProfile);
+
             return profileMemberResponse;
         }
     }

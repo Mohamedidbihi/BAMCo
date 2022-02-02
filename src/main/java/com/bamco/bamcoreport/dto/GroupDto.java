@@ -9,8 +9,8 @@ public class GroupDto {
 
     private  long id;
     private String name;
-    private String parentpath;
-    private String displayname;
+    private String parentPath;
+    private String displayName;
     private String description;
     private UserEntity createdby;
     private LocalDateTime createdat;
@@ -33,19 +33,19 @@ public class GroupDto {
     }
 
     public String getParentpath() {
-        return parentpath;
+        return parentPath;
     }
 
     public void setParentpath(String parentpath) {
-        this.parentpath = parentpath;
+        this.parentPath = parentpath;
     }
 
     public String getDisplayname() {
-        return displayname;
+        return displayName;
     }
 
     public void setDisplayname(String displayname) {
-        this.displayname = displayname;
+        this.displayName = displayname;
     }
 
     public String getDescription() {

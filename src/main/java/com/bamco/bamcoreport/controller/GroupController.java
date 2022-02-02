@@ -32,7 +32,6 @@ public class GroupController {
 
     @PostMapping
     public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupRequest) throws Exception {
-
         GroupDto createGroup = this.appService.addGroup(groupRequest);
         return new ResponseEntity(createGroup, HttpStatus.CREATED);
 

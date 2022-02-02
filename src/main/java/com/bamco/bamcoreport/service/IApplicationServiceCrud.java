@@ -51,6 +51,7 @@ public interface IApplicationServiceCrud {
     MembershipDto updateMembership(MembershipDto r, long id);
 
 
+
     List<UserContactInfoDto> getAllUserContactInfo();
 
     UserContactInfoDto findUserContactInfoById(long id);
@@ -58,6 +59,7 @@ public interface IApplicationServiceCrud {
     UserContactInfoDto addUserContactInfo(UserContactInfoDto r);
 
     UserContactInfoDto updateUserContactInfo(UserContactInfoDto r, long id);
+
 
 
     List<ProfileMemberDto> getAllProfileMembers();

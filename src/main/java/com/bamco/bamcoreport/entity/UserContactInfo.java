@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 
+
 @Entity(
         name = "usercontactinfo"
 )
@@ -18,11 +19,10 @@ public class UserContactInfo implements Serializable {
     )
     private Long id;
 
-    @JsonIgnore
     @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     @JoinColumn(
             name = "userid",
-            nullable = false,
+            unique = true,
             referencedColumnName = "id"
     )
     private UserEntity userid;
