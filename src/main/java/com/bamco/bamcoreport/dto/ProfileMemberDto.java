@@ -4,8 +4,12 @@ import com.bamco.bamcoreport.entity.Group;
 import com.bamco.bamcoreport.entity.Profile;
 import com.bamco.bamcoreport.entity.Role;
 import com.bamco.bamcoreport.entity.UserEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "Profile Membership", description = "Profile Membership Properties")
 public class ProfileMemberDto {
+    @ApiModelProperty(hidden = true)
     private long id;
     private Profile profileId;
     private UserEntity userId;

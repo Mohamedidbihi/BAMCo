@@ -3,7 +3,9 @@ package com.bamco.bamcoreport.dto;
 import com.bamco.bamcoreport.entity.Group;
 import com.bamco.bamcoreport.entity.Role;
 import com.bamco.bamcoreport.entity.UserEntity;
+import io.swagger.annotations.ApiModel;
 
+@ApiModel(value = "Membership", description = "Membership Properties")
 public class MembershipDto {
     private UserEntity userid;
     private Role roleId;

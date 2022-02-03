@@ -3,6 +3,7 @@ package com.bamco.bamcoreport.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
-
+@ApiModel(value = "User Entity", description = "This entity is just a representation of the users table in the BAMCo database")
 @Entity(
         name = "users"
 )

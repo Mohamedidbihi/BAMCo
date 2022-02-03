@@ -1,6 +1,7 @@
 package com.bamco.bamcoreport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@ApiModel(value = "Role Entity", description = "This entity is just a representation of the roles table in the BAMCo database")
 @Entity(
         name = "role"
 )

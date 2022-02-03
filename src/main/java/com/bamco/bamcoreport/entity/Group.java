@@ -1,13 +1,14 @@
 package com.bamco.bamcoreport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@ApiModel(value = "Group Entity", description = "This entity is just a representation of the groups table in the BAMCo database")
 @Entity (name = "groups")
 public class Group implements Serializable {
     private static final long serialVersionUID = -5051985663615982848L;

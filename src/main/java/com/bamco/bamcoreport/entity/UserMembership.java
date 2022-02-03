@@ -1,12 +1,14 @@
 package com.bamco.bamcoreport.entity;
 
 
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@ApiModel(value = "User Membership Entity", description = "This entity is just a representation of the memberships table in the BAMCo database")
 @Entity(name = "userMembership")
 public class UserMembership implements Serializable {
     private static final long serialVersionUID = -6232065926835235823L;

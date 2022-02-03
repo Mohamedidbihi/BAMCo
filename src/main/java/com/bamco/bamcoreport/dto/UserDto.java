@@ -2,13 +2,17 @@ package com.bamco.bamcoreport.dto;
 import com.bamco.bamcoreport.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDateTime;
 
+@ApiModel(value = "User", description = "User Properties")
 public class UserDto  {
-
+    @ApiModelProperty(hidden = true)
     private long id;
     private boolean enabled ;
+    @ApiModelProperty(notes = "The username should be unique")
     private String username;
     private String encryptedpassword;
     private String firstname;
@@ -17,7 +21,9 @@ public class UserDto  {
     private String jobtitle;
     private UserEntity manageruserid;
     private UserEntity createdby;
+    @ApiModelProperty(hidden = true)
     private LocalDateTime createdat;
+    @ApiModelProperty(hidden = true)
     private LocalDateTime updatedat;
 
     public UserDto() {

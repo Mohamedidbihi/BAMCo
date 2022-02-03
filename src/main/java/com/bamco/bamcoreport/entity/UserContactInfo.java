@@ -1,11 +1,12 @@
 package com.bamco.bamcoreport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-
+@ApiModel(value = "User Contact Info Entity", description = "This entity is just a representation of the users contact info table in the BAMCo database")
 @Entity(
         name = "usercontactinfo"
 )

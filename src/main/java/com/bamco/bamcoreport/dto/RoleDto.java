@@ -1,16 +1,22 @@
 package com.bamco.bamcoreport.dto;
 
 import com.bamco.bamcoreport.entity.UserEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDateTime;
 
+@ApiModel(value = "Role", description = "Role Properties")
 public class RoleDto {
+    @ApiModelProperty(hidden = true)
     private Long id;
     private String name;
     private String displayName;
     private String description;
     private UserEntity createdBy;
+    @ApiModelProperty(hidden = true)
     private LocalDateTime createdAt;
+    @ApiModelProperty(hidden = true)
     private LocalDateTime updatedAt;
 
     public Long getId() {

@@ -1,19 +1,24 @@
 package com.bamco.bamcoreport.dto;
 
 import com.bamco.bamcoreport.entity.UserEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
+@ApiModel(value = "Group", description = "Group Properties")
 public class GroupDto {
-
+    @ApiModelProperty(hidden = true)
     private  long id;
     private String name;
     private String parentPath;
+    @ApiModelProperty(notes = "The display name should be unique")
     private String displayName;
     private String description;
     private UserEntity createdby;
+    @ApiModelProperty(hidden = true)
     private LocalDateTime createdat;
+    @ApiModelProperty(hidden = true)
     private LocalDateTime updatedat;
 
     public long getId() {

@@ -408,7 +408,7 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     @Override
     public List<ProfileMemberDto> getAllProfileMembers() {
         List<ProfileMember> profileMembers = this.profileMemberRepo.findAll();
-        Type listType = (new TypeToken<List<UserDto>>() {
+        Type listType = (new TypeToken<List<ProfileMemberDto>>() {
         }).getType();
         List<ProfileMemberDto> profileMemberDtos = (List)(new ModelMapper()).map(profileMembers, listType);
 

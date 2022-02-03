@@ -1,8 +1,11 @@
 package com.bamco.bamcoreport.entity;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@ApiModel(value = "Profile Membership Entity", description = "This entity is just a representation of the profile membership table in the BAMCo database")
 @Entity(name = "profileMember")
 public class ProfileMember implements Serializable {
 
@@ -14,19 +17,19 @@ public class ProfileMember implements Serializable {
     )
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profileid")
     private Profile profileId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private UserEntity userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupid")
     private Group groupId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleid")
     private Role roleId;
 

@@ -2,6 +2,7 @@ package com.bamco.bamcoreport.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@ApiModel(value = "Profile Entity", description = "This entity is just a representation of the profiles table in the BAMCo database")
 @Entity(name = "profile")
 public class Profile implements Serializable {
 

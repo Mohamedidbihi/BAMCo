@@ -1,10 +1,15 @@
 package com.bamco.bamcoreport.dto;
 
 import com.bamco.bamcoreport.entity.UserEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "User Contact Info", description = "User Contact Info Properties")
 public class UserContactInfoDto {
+    @ApiModelProperty(hidden = true)
     private Long id;
     private UserEntity userid;
+    @ApiModelProperty(notes = "The email should be unique")
     private String email;
     private String phone;
     private String number;
