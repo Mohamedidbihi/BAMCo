@@ -29,19 +29,25 @@ public class UserServiceImpl implements UserSevice {
 
         userDto.setEncryptedpassword(bCryptPasswordEncoder.encode(userDto.getEncryptedpassword()));
         UserEntity userRequest = userMapping.convertToEntity(userDto,UserEntity.class);
-        UserDto getManagerUserId = this.getUserById(userRequest.getManageruserid().getId());
-        userRequest.setManageruserid(userMapping.convertToEntity(getManagerUserId,UserEntity.class));
-        UserDto getCreatedBy = this.getUserById(userRequest.getCreatedby().getId());
-        userRequest.setCreatedby(userMapping.convertToEntity(getCreatedBy,UserEntity.class));
+        System.out.println("************************** CREATE USER ENTITY : " + userRequest.getManageruserid());
+         UserDto getManagerUserId = this.getUserById(userRequest.getManageruserid().getId());
+         userRequest.setManageruserid(userMapping.convertToEntity(getManagerUserId,UserEntity.class));
+            UserDto getCreatedBy = this.getUserById(userRequest.getCreatedby().getId());
+            userRequest.setCreatedby(userMapping.convertToEntity(getCreatedBy,UserEntity.class));
         UserEntity user = this.userRepo.save(userRequest);
         UserDto userResponse = userMapping.convertToDto(user, UserDto.class);
         return userResponse;
     }
 
     public UserDto getUserById(long id) {
+
+        System.out.println("************************** GET USER ID : "+ id);
         UserEntity userEntity = this.userRepo.findById(id);
+        System.out.println("************************** USER ENTITY : " + userEntity);
+
         if (userEntity == null) {
-            throw new RuntimeException("error");
+           throw new RuntimeException("error");
+            //return  null;
         } else {
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(userEntity, userDto);
@@ -66,8 +72,10 @@ public class UserServiceImpl implements UserSevice {
 
      @Override
     public void deleteUser(long id) {
-        UserEntity userEntity = this.userRepo.findById(id);
-        if (userEntity == null) {
+         System.out.println("************************** DELETE ID : "+ id);
+         UserEntity userEntity = this.userRepo.findById(id);
+         System.out.println("************************** DELETE ENTITY : " + userEntity);
+         if (userEntity == null) {
             throw new RuntimeException("null");
         } else {
             this.userRepo.delete(userEntity);

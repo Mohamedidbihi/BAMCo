@@ -30,6 +30,18 @@ public class UserDto  {
 
     }
 
+    public UserDto(boolean enabled, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby) {
+        this.enabled = enabled;
+        this.username = username;
+        this.encryptedpassword = encryptedpassword;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.title = title;
+        this.jobtitle = jobtitle;
+        this.manageruserid = manageruserid;
+        this.createdby = createdby;
+    }
+
     public long getId() {
         return id;
     }

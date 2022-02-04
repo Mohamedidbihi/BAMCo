@@ -46,7 +46,7 @@ public class Role implements Serializable {
     )
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "createdby",
             nullable = false

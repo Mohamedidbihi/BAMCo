@@ -12,6 +12,7 @@ public class BamCoApplication {
     public static void main(String[] args) {
         SpringApplication.run(BamCoApplication.class, args);
     }
+
     @Bean
     public ModelMapper modelMapper (){
         return new ModelMapper();

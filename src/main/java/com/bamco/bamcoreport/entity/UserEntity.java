@@ -114,6 +114,38 @@ public class UserEntity  {
         this.updatedat = updatedat;
     }
 
+    public UserEntity(long id, Boolean enabled, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby, LocalDateTime createdat, LocalDateTime updatedat) {
+        this.id = id;
+        this.enabled = enabled;
+        this.username = username;
+        this.encryptedpassword = encryptedpassword;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.title = title;
+        this.jobtitle = jobtitle;
+        this.manageruserid = manageruserid;
+        this.createdby = createdby;
+        this.createdat = createdat;
+        this.updatedat = updatedat;
+    }
+
+    public UserEntity(long id, Boolean enabled, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby) {
+        this.id = id;
+        this.enabled = enabled;
+        this.username = username;
+        this.encryptedpassword = encryptedpassword;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.title = title;
+        this.jobtitle = jobtitle;
+        this.manageruserid = manageruserid;
+        this.createdby = createdby;
+    }
+
+    public UserEntity(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

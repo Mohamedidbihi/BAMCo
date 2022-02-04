@@ -46,7 +46,7 @@ public class Group implements Serializable {
     )
     private String description;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "createdby",
             nullable = false

@@ -41,7 +41,7 @@ public class Profile implements Serializable {
             columnDefinition="TEXT")
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "created_by",
             nullable = false
@@ -60,7 +60,7 @@ public class Profile implements Serializable {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastupdateby")
     private UserEntity lastUpdateBy;
 
