@@ -1,7 +1,9 @@
 package com.bamco.bamcoreport.controller;
 
+import com.bamco.bamcoreport.dto.UserContactInfoDto;
 import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.entity.UserEntity;
+import com.bamco.bamcoreport.request.PasswordChangeRequest;
 import com.bamco.bamcoreport.service.UserSevice;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -80,5 +82,20 @@ public class UserController {
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         this.userService.deleteUser(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping({"/{id}/changePassword"})
+    @ApiOperation(
+            value = "Change Password",
+            notes = "Change the password for a specific user from BAMCo database"
+    )
+    public ResponseEntity<Object> changePassword(@PathVariable Long id, @RequestBody PasswordChangeRequest passwordChangeRequest) throws Exception {
+
+        boolean passwordChanged = this.userService.changePassword(id, passwordChangeRequest);
+
+        if (passwordChanged){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Votre mot de passe a été changé avec succès!");
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Mot de passe est incorrect!");
     }
 }

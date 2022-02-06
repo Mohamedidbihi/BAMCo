@@ -3,6 +3,7 @@ package com.bamco.bamcoreport.service;
 import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.entity.UserEntity;
 import com.bamco.bamcoreport.repository.UserRepository;
+import com.bamco.bamcoreport.request.PasswordChangeRequest;
 import com.bamco.bamcoreport.service.mapper.IMapClassWithDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -29,7 +30,6 @@ public class UserServiceImpl implements UserSevice {
 
         userDto.setEncryptedpassword(bCryptPasswordEncoder.encode(userDto.getEncryptedpassword()));
         UserEntity userRequest = userMapping.convertToEntity(userDto,UserEntity.class);
-        System.out.println("************************** CREATE USER ENTITY : " + userRequest.getManageruserid());
          UserDto getManagerUserId = this.getUserById(userRequest.getManageruserid().getId());
          userRequest.setManageruserid(userMapping.convertToEntity(getManagerUserId,UserEntity.class));
             UserDto getCreatedBy = this.getUserById(userRequest.getCreatedby().getId());
@@ -41,9 +41,7 @@ public class UserServiceImpl implements UserSevice {
 
     public UserDto getUserById(long id) {
 
-        System.out.println("************************** GET USER ID : "+ id);
         UserEntity userEntity = this.userRepo.findById(id);
-        System.out.println("************************** USER ENTITY : " + userEntity);
 
         if (userEntity == null) {
            throw new RuntimeException("error");
@@ -72,9 +70,7 @@ public class UserServiceImpl implements UserSevice {
 
      @Override
     public void deleteUser(long id) {
-         System.out.println("************************** DELETE ID : "+ id);
          UserEntity userEntity = this.userRepo.findById(id);
-         System.out.println("************************** DELETE ENTITY : " + userEntity);
          if (userEntity == null) {
             throw new RuntimeException("null");
         } else {
@@ -90,5 +86,27 @@ public class UserServiceImpl implements UserSevice {
         List<UserDto> userDtos = (List)(new ModelMapper()).map(users, listType);
         return userDtos;
       //Solution2 return userMapping.convertListToListDto(users,UserDto.class);
+    }
+
+    @Override
+    public boolean changePassword(long id, PasswordChangeRequest passwordChangeRequest) {
+
+        boolean matches = false;
+
+        UserEntity user = this.userRepo.findById(id);
+        if (user == null) {
+            throw new RuntimeException("null");
+        } else {
+            matches = bCryptPasswordEncoder.matches(passwordChangeRequest.getOldPassword(), user.getEncryptedpassword());
+        }
+
+        System.out.println("State is : " + matches);
+
+        if (matches){
+            user.setEncryptedpassword(bCryptPasswordEncoder.encode(passwordChangeRequest.getNewPassword()));
+            this.userRepo.save(user);
+        }
+
+        return matches;
     }
 }
