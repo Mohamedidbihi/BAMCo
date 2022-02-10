@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @ApiModel(value = "User Entity", description = "This entity is just a representation of the users table in the BAMCo database")
@@ -32,6 +33,10 @@ public class UserEntity  {
     @JsonIgnore
     @OneToOne(targetEntity = UserContactInfo.class, mappedBy = "userid")
     private UserContactInfo userContactInfo;
+
+    @JsonIgnore
+    @OneToMany(targetEntity = Rejet.class, mappedBy = "TakenBy", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Rejet> rejets;
 
     @Column(
             nullable = false,
@@ -168,6 +173,14 @@ public class UserEntity  {
 
     public void setUserContactInfo(UserContactInfo userContactInfo) {
         this.userContactInfo = userContactInfo;
+    }
+
+    public List<Rejet> getRejets() {
+        return rejets;
+    }
+
+    public void setRejets(List<Rejet> rejets) {
+        this.rejets = rejets;
     }
 
     public String getUsername() {

@@ -3,15 +3,23 @@ package com.bamco.bamcoreport.service;
 import com.bamco.bamcoreport.dto.*;
 import com.bamco.bamcoreport.entity.*;
 import com.bamco.bamcoreport.repository.*;
+import com.bamco.bamcoreport.dto.CountDayDto;
 import com.bamco.bamcoreport.service.mapper.IMapClassWithDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service("ApplicationServices")
 public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
@@ -38,6 +46,9 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
     UserContactInfoRepository userContactInfoRepo;
 
     @Autowired
+    RejetRepository rejetRepo;
+
+    @Autowired
     IMapClassWithDto<Group, GroupDto> groupMapping;
 
     @Autowired
@@ -57,6 +68,9 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
     @Autowired
     IMapClassWithDto<UserContactInfo, UserContactInfoDto> userContactInfoMapping;
+
+    @Autowired
+    IMapClassWithDto<Rejet, RejetDto> rejetMapping;
 
 
     @Override
@@ -121,6 +135,10 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
         }
     }
 
+
+
+
+
     @Override
     public List<RoleDto> getAllRoles() {
         List<Role> roles = this.roleRepo.findAll();
@@ -181,6 +199,10 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             return roleResponse;
         }
     }
+
+
+
+
 
     @Override
     public List<ProfileDto> getAllProfiles() {
@@ -249,6 +271,9 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
             return profileResponse;
         }
     }
+
+
+
 
 
     @Override
@@ -484,6 +509,156 @@ public class ApplicationServiceCrudImpl implements IApplicationServiceCrud {
 
             return profileMemberResponse;
         }
+    }
+
+
+
+
+
+    @Override
+    public List<RejetDto> getAllRejets() {
+        List<Rejet> rejets = this.rejetRepo.findAll();
+        Type listType = (new TypeToken<List<RejetDto>>() {
+        }).getType();
+        List<RejetDto> rejetDtos = (List)(new ModelMapper()).map(rejets, listType);
+        return rejetDtos;
+    }
+
+    @Override
+    public RejetDto findRejetById(long id) {
+        Rejet rejet = this.rejetRepo.findById(id).get();
+        if (rejet == null) {
+            throw new RuntimeException("No rejet was found!");
+        } else {
+            RejetDto rejetDto = new RejetDto();
+            BeanUtils.copyProperties(rejet, rejetDto);
+            return rejetDto;
+        }
+    }
+
+    @Override
+    public RejetDto addRejet(RejetDto rejetDto, MultipartFile file) {
+        Rejet rejetRequest = rejetMapping.convertToEntity(rejetDto, Rejet.class);
+        UserEntity getUser = this.userRepo.findById(rejetDto.getTakenBy().getId());
+        rejetRequest.setTakenBy(getUser);
+
+        try {
+            String path = this.writeFile(file, rejetDto.getUserRegistrationNumber());
+            rejetRequest.setFile(path);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Rejet rejet = this.rejetRepo.save(rejetRequest);
+        RejetDto rejetResponse = rejetMapping.convertToDto(rejet, RejetDto.class);
+        return rejetResponse;
+    }
+
+    @Override
+    public boolean deleteRejet(long id) {
+        Rejet rejet = this.rejetRepo.findById(id).get();
+        if (rejet == null) {
+            throw new RuntimeException("No rejet was found!");
+        } else {
+            new File("C:\\" + rejet.getFile()).delete();
+            this.rejetRepo.delete(rejet);
+        }
+        return true;
+    }
+
+    @Override
+    public RejetDto updateRejet(RejetDto rejetDto, long id, MultipartFile file) {
+        Rejet rejet = this.rejetRepo.findById(id).get();
+        if (rejet == null) {
+            throw new RuntimeException("No rejet was found!");
+
+        } else {
+            rejet.setFlowType(rejetDto.getFlowType());
+            rejet.setRejectNature(rejetDto.getRejectNature());
+            rejet.setUserRegistrationNumber(rejetDto.getUserRegistrationNumber());
+            rejet.setCliFileCode(rejetDto.getCliFileCode());
+            rejet.setEntity(rejetDto.getEntity());
+            rejet.setBu(rejetDto.getBu());
+            rejet.setSu(rejetDto.getSu());
+            rejet.setAgencyCode(rejetDto.getAgencyCode());
+            rejet.setRegionalDelegation(rejetDto.getRegionalDelegation());
+            rejet.setSubDelegationType(rejetDto.getSubDelegationType());
+            rejet.setSubDelegationName(rejetDto.getSubDelegationName());
+            rejet.setClientCode(rejetDto.getClientCode());
+            rejet.setGravity(rejetDto.getGravity());
+            rejet.setZoneCode(rejetDto.getZoneCode());
+            rejet.setWrongField(rejetDto.getWrongField());
+            rejet.setErrorCode(rejetDto.getErrorCode());
+            rejet.setErrorLabel(rejetDto.getErrorLabel());
+            rejet.setRequestTaken(rejetDto.getRequestTaken());
+            rejet.setActionDetail(rejetDto.getActionDetail());
+            rejet.setTakenBy(rejetDto.getTakenBy());
+
+            if (file.getSize() > 0){
+                // delete old file
+                new File("C:\\" + rejet.getFile()).delete();
+
+                try {
+                    String path = this.writeFile(file, rejetDto.getUserRegistrationNumber());
+                    rejet.setFile(path);
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            Rejet updatedRejet = (Rejet) this.rejetRepo.save(rejet);
+            RejetDto rejetResponse = new RejetDto();
+            BeanUtils.copyProperties(updatedRejet, rejetResponse);
+
+            if (!Objects.isNull(rejetDto.getTakenBy())){
+                UserEntity getUserId = this.userRepo.findById(rejetResponse.getTakenBy().getId());
+                rejetResponse.setTakenBy(getUserId);
+            }
+            return rejetResponse;
+        }
+    }
+
+    @Override
+    public long getRejetsCount() {
+        return rejetRepo.count();
+    }
+
+    @Override
+    public List<CountDayDto> getRejetsByDay() {
+        return rejetRepo.getDailyCount();
+    }
+
+    @Override
+    public List<CountDayDto> getRejetsByUser(long id) {
+        return rejetRepo.getRejetsByUser(id);
+    }
+
+
+    @Override
+    public String writeFile(MultipartFile file, long registrationNumber) throws Exception{
+
+        String folder = "/docs/";
+        byte[] fileBytes = file.getBytes();
+
+        // get timestamps
+        Date date= new Date();
+        String time = String.valueOf(date.getTime());
+
+        // get file extension
+        String fileOriginalName = file.getOriginalFilename();
+        String extension = fileOriginalName.substring(fileOriginalName.lastIndexOf("."));
+
+        // set file name
+        String fileName = String.valueOf(registrationNumber) + "_" + time + extension;
+
+        //get path
+        Path path = Paths.get(folder + fileName);
+
+        // write file
+        Files.write(path, fileBytes);
+
+        return path.toString();
     }
 
 }

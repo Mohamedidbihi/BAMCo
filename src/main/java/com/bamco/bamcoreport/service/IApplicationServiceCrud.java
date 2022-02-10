@@ -1,7 +1,8 @@
 package com.bamco.bamcoreport.service;
 
 import com.bamco.bamcoreport.dto.*;
-import com.bamco.bamcoreport.entity.Group;
+import com.bamco.bamcoreport.dto.CountDayDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -71,5 +72,25 @@ public interface IApplicationServiceCrud {
     boolean deleteProfileMember(long id);
 
     ProfileMemberDto updateProfileMember(ProfileMemberDto r, long id);
+
+
+
+    List<RejetDto> getAllRejets();
+
+    RejetDto findRejetById(long id);
+
+    RejetDto addRejet(RejetDto r, MultipartFile file);
+
+    boolean deleteRejet(long id);
+
+    RejetDto updateRejet(RejetDto r, long id, MultipartFile file);
+
+    long getRejetsCount();
+
+    List<CountDayDto> getRejetsByDay();
+
+    List<CountDayDto> getRejetsByUser(long id);
+
+    String writeFile(MultipartFile file, long registrationNumber) throws Exception;
 
 }
