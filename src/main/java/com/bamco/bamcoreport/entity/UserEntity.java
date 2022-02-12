@@ -50,7 +50,7 @@ public class UserEntity  {
             nullable = false,
             length = 255
     )
-    private String encryptedpassword;
+    private String password;
 
     @Column(
             nullable = false,
@@ -103,12 +103,12 @@ public class UserEntity  {
 
     }
 
-    public UserEntity(long id, Boolean enabled, UserContactInfo userContactInfo, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby, LocalDateTime createdat, LocalDateTime updatedat) {
+    public UserEntity(long id, Boolean enabled, UserContactInfo userContactInfo, String username, String password, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby, LocalDateTime createdat, LocalDateTime updatedat) {
         this.id = id;
         this.enabled = enabled;
         this.userContactInfo = userContactInfo;
         this.username = username;
-        this.encryptedpassword = encryptedpassword;
+        this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.title = title;
@@ -119,11 +119,11 @@ public class UserEntity  {
         this.updatedat = updatedat;
     }
 
-    public UserEntity(long id, Boolean enabled, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby, LocalDateTime createdat, LocalDateTime updatedat) {
+    public UserEntity(long id, Boolean enabled, String username, String password, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby, LocalDateTime createdat, LocalDateTime updatedat) {
         this.id = id;
         this.enabled = enabled;
         this.username = username;
-        this.encryptedpassword = encryptedpassword;
+        this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.title = title;
@@ -134,11 +134,11 @@ public class UserEntity  {
         this.updatedat = updatedat;
     }
 
-    public UserEntity(long id, Boolean enabled, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby) {
+    public UserEntity(long id, Boolean enabled, String username, String password, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby) {
         this.id = id;
         this.enabled = enabled;
         this.username = username;
-        this.encryptedpassword = encryptedpassword;
+        this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.title = title;
@@ -191,12 +191,12 @@ public class UserEntity  {
         this.username = username;
     }
 
-    public String getEncryptedpassword() {
-        return encryptedpassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEncryptedpassword(String encryptedpassword) {
-        this.encryptedpassword = encryptedpassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstname() {
@@ -270,7 +270,7 @@ public class UserEntity  {
                 ", enabled=" + enabled +
                 ", userContactInfo=" + userContactInfo +
                 ", username='" + username + '\'' +
-                ", encryptedpassword='" + encryptedpassword + '\'' +
+                ", encryptedpassword='" + password + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", title='" + title + '\'' +

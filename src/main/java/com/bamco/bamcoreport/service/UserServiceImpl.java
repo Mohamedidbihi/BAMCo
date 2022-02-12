@@ -2,6 +2,8 @@ package com.bamco.bamcoreport.service;
 
 import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.entity.UserEntity;
+import com.bamco.bamcoreport.entity.UserMembership;
+import com.bamco.bamcoreport.repository.MembershipRepository;
 import com.bamco.bamcoreport.repository.UserRepository;
 import com.bamco.bamcoreport.request.PasswordChangeRequest;
 import com.bamco.bamcoreport.service.mapper.IMapClassWithDto;
@@ -9,14 +11,24 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service("UserService")
-public class UserServiceImpl implements UserSevice {
+public class UserServiceImpl implements UserSevice , UserDetailsService {
+
+    @Autowired
+    MembershipRepository membershipRepository;
+
     @Autowired
     UserRepository userRepo;
 
@@ -28,7 +40,7 @@ public class UserServiceImpl implements UserSevice {
 
     public UserDto createUser(UserDto userDto) {
 
-        userDto.setEncryptedpassword(bCryptPasswordEncoder.encode(userDto.getEncryptedpassword()));
+        userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getpassword()));
         UserEntity userRequest = userMapping.convertToEntity(userDto, UserEntity.class);
         UserDto getManagerUserId = this.getUserById(userRequest.getManageruserid().getId());
         userRequest.setManageruserid(userMapping.convertToEntity(getManagerUserId, UserEntity.class));
@@ -60,7 +72,7 @@ public class UserServiceImpl implements UserSevice {
         } else {
             userEntity.setFirstname(userDto.getFirstname());
             userEntity.setLastname(userDto.getLastname());
-            userEntity.setEncryptedpassword(this.bCryptPasswordEncoder.encode(userDto.getEncryptedpassword()));
+            userEntity.setPassword(this.bCryptPasswordEncoder.encode(userDto.getpassword()));
             UserEntity userEn = (UserEntity)this.userRepo.save(userEntity);
             UserDto userD = new UserDto();
             BeanUtils.copyProperties(userEn, userD);
@@ -97,16 +109,31 @@ public class UserServiceImpl implements UserSevice {
         if (user == null) {
             throw new RuntimeException("null");
         } else {
-            matches = bCryptPasswordEncoder.matches(passwordChangeRequest.getOldPassword(), user.getEncryptedpassword());
+            matches = bCryptPasswordEncoder.matches(passwordChangeRequest.getOldPassword(), user.getPassword());
         }
 
         System.out.println("State is : " + matches);
 
         if (matches){
-            user.setEncryptedpassword(bCryptPasswordEncoder.encode(passwordChangeRequest.getNewPassword()));
+            user.setPassword(bCryptPasswordEncoder.encode(passwordChangeRequest.getNewPassword()));
             this.userRepo.save(user);
         }
 
         return matches;
+    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        if (userRepo.findByUsername(username)!=null){
+            UserEntity user = userRepo.findByUsername(username);
+            List<UserMembership> userMemberShip = membershipRepository.findUserMemberShipByUserid(user);
+            userMemberShip.forEach(role ->{
+                authorities.add(new SimpleGrantedAuthority(role.getRoleId().getName()));
+            });
+
+            return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
+        }else throw  new UsernameNotFoundException("This UserName "+username+" Not found ");
     }
 }

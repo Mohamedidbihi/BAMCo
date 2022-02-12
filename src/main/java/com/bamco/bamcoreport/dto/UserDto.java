@@ -14,7 +14,7 @@ public class UserDto  {
     private boolean enabled ;
     @ApiModelProperty(notes = "The username should be unique")
     private String username;
-    private String encryptedpassword;
+    private String password;
     private String firstname;
     private String lastname;
     private String title;
@@ -30,10 +30,10 @@ public class UserDto  {
 
     }
 
-    public UserDto(boolean enabled, String username, String encryptedpassword, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby) {
+    public UserDto(boolean enabled, String username, String password, String firstname, String lastname, String title, String jobtitle, UserEntity manageruserid, UserEntity createdby) {
         this.enabled = enabled;
         this.username = username;
-        this.encryptedpassword = encryptedpassword;
+        this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.title = title;
@@ -66,12 +66,12 @@ public class UserDto  {
         this.username = username;
     }
 
-    public String getEncryptedpassword() {
-        return encryptedpassword;
+    public String getpassword() {
+        return password;
     }
 
-    public void setEncryptedpassword(String encryptedpassword) {
-        this.encryptedpassword = encryptedpassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstname() {
