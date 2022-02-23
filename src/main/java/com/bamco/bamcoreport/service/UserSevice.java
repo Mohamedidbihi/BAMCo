@@ -3,6 +3,7 @@ package com.bamco.bamcoreport.service;
 
 import com.bamco.bamcoreport.dto.UserDto;
 import com.bamco.bamcoreport.entity.UserEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Collection;
 import java.util.List;

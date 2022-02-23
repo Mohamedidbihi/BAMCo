@@ -1,13 +1,15 @@
 package com.bamco.bamcoreport.request;
 
-public class UserLoginRequest {
+import java.io.Serializable;
+
+public class UserLoginRequest implements Serializable {
+
+    private static final long serialVersionUID = -7249937977115969457L;
 
     private String username;
     private String password;
 
-    public UserLoginRequest(){
-
-    }
+    public UserLoginRequest(){}
 
     public String getUsername() {
         return username;

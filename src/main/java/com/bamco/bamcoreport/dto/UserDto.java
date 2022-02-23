@@ -10,7 +10,7 @@ public class UserDto  {
     private long id;
     private boolean enabled ;
     private String username;
-    private String encryptedpassword;
+    private String password;
     private String firstname;
     private String lastname;
     private String title;
@@ -48,12 +48,12 @@ public class UserDto  {
         this.username = username;
     }
 
-    public String getEncryptedpassword() {
-        return encryptedpassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEncryptedpassword(String encryptedpassword) {
-        this.encryptedpassword = encryptedpassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstname() {
